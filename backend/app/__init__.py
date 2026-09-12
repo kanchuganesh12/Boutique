@@ -1,0 +1,1 @@
+"""Boutique FastAPI application package."""
