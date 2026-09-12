@@ -41,13 +41,13 @@ export function TopCollections({ categories }: Props) {
 
           <div
             ref={scroller}
-            className="grid grid-cols-2 gap-4 sm:flex sm:snap-x sm:snap-mandatory sm:gap-6 sm:overflow-x-auto sm:pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:gap-6 sm:px-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {categories.map((c) => (
               <Link
                 key={c.id}
                 to={`/collections/${c.slug}`}
-                className="group sm:w-36 sm:shrink-0 sm:snap-start"
+                className="group w-24 shrink-0 snap-start sm:w-36"
               >
                 <div className="mx-auto aspect-square overflow-hidden rounded-full bg-ivory-deep">
                   <img
