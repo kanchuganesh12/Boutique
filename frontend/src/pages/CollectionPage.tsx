@@ -46,15 +46,15 @@ export function CollectionPage() {
       </nav>
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className="font-display text-4xl capitalize">{slug.replace(/-/g, ' ')}</h1>
+          <h1 className="font-display text-3xl capitalize sm:text-4xl">{slug.replace(/-/g, ' ')}</h1>
           <p className="mt-2 text-muted">
             {data ? `${data.total} styles` : 'Loading…'} crafted for comfort and celebration.
           </p>
         </div>
-        <label className="text-sm text-muted">
-          Sort{' '}
+        <label className="flex w-full flex-col gap-1 text-sm text-muted sm:w-auto sm:flex-row sm:items-center">
+          Sort
           <select
-            className="ml-2 rounded-md border border-border bg-white px-3 py-2 text-ink"
+            className="w-full rounded-md border border-border bg-white px-3 py-2 text-ink sm:ml-2 sm:w-auto"
             value={sort}
             onChange={(e) => {
               const next = new URLSearchParams(params)

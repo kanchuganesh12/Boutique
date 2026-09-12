@@ -41,12 +41,14 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
     @apply m-0 bg-ivory font-sans text-ink antialiased;
     font-size: 15px;
     line-height: 1.55;
+    overflow-x: clip;
   }
 
   h1,
@@ -115,5 +117,23 @@
 
   .tracking-label {
     letter-spacing: 0.08em;
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .page-bottom-spacer {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  @media (min-width: 768px) {
+    .page-bottom-spacer {
+      padding-bottom: 0;
+    }
   }
 }

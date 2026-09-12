@@ -38,8 +38,8 @@ export function NewArrivalsBlock({ newArrivals, collections, spotlights }: Props
         <div className="container-boutique space-y-14">
           {Object.entries(spotlights).map(([key, products]) => (
             <div key={key}>
-              <div className="mb-6 flex items-end justify-between">
-                <h2 className="font-display text-3xl capitalize">
+              <div className="mb-6 flex flex-col items-start gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <h2 className="font-display text-2xl capitalize sm:text-3xl">
                   {key.replace(/-/g, ' ')}
                 </h2>
                 <Link

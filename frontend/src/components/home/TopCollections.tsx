@@ -26,7 +26,7 @@ export function TopCollections({ categories }: Props) {
             type="button"
             aria-label="Scroll left"
             onClick={() => scroll(-1)}
-            className="absolute -left-2 top-1/3 z-10 hidden h-11 w-11 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
+            className="absolute left-0 top-1/3 z-10 hidden h-11 w-11 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -34,7 +34,7 @@ export function TopCollections({ categories }: Props) {
             type="button"
             aria-label="Scroll right"
             onClick={() => scroll(1)}
-            className="absolute -right-2 top-1/3 z-10 hidden h-11 w-11 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
+            className="absolute right-0 top-1/3 z-10 hidden h-11 w-11 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
           >
             <ChevronRight className="h-5 w-5" />
           </button>

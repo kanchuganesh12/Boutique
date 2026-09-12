@@ -77,12 +77,12 @@ export function Header({ categories }: Props) {
           </div>
 
           <Link to="/" className="justify-self-center text-center" aria-label="Boutique home">
-            <span className="block font-display text-3xl leading-none tracking-wide text-ink md:text-4xl lg:text-5xl">
+            <span className="block font-display text-2xl leading-none tracking-wide text-ink sm:text-3xl md:text-4xl lg:text-5xl">
               Boutique
             </span>
           </Link>
 
-          <div className="flex items-center justify-self-end gap-0.5">
+          <div className="flex items-center justify-self-end gap-0 sm:gap-0.5">
             <button
               type="button"
               aria-label="Search"
@@ -210,7 +210,7 @@ export function DrawerShell({
     <div className="fixed inset-0 z-[60]">
       <button type="button" className="absolute inset-0 bg-ink/40" aria-label="Close" onClick={onClose} />
       <aside
-        className={`absolute top-0 flex h-full w-full max-w-md flex-col bg-ivory shadow-lg ${
+        className={`absolute top-0 flex h-full w-full max-w-full flex-col bg-ivory shadow-lg safe-top safe-bottom sm:max-w-md ${
           side === 'right' ? 'right-0' : 'left-0'
         }`}
         role="dialog"
@@ -223,7 +223,7 @@ export function DrawerShell({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto">{children}</div>
+        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
       </aside>
     </div>
   )

@@ -38,19 +38,21 @@ export function ProductPage() {
   const selectedSize = size || product.sizes[0]
 
   return (
-    <div className="container-boutique section-y">
+    <div className="container-boutique section-y page-bottom-spacer">
       <Helmet>
         <title>{product.name} | Boutique</title>
       </Helmet>
-      <nav className="mb-6 text-sm text-muted">
-        <Link to="/">Home</Link> /{' '}
+      <nav className="mb-6 flex flex-wrap gap-x-1 text-sm text-muted">
+        <Link to="/">Home</Link>
+        <span>/</span>
         <Link to={`/collections/${product.category_slug}`} className="capitalize">
           {product.category_slug}
-        </Link>{' '}
-        / <span className="text-ink">{product.name}</span>
+        </Link>
+        <span>/</span>
+        <span className="line-clamp-1 text-ink">{product.name}</span>
       </nav>
 
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
         <div>
           <div className="aspect-[3/4] overflow-hidden rounded-lg bg-ivory-deep">
             <img
@@ -59,7 +61,7 @@ export function ProductPage() {
               className="h-full w-full object-cover"
             />
           </div>
-          <div className="mt-3 flex gap-2 overflow-x-auto">
+          <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
             {product.images.map((img, i) => (
               <button
                 key={img.url}
@@ -116,7 +118,7 @@ export function ProductPage() {
             </div>
           ) : null}
 
-          <div className="mt-6 flex items-center gap-3">
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             <div className="flex items-center rounded-md border border-border">
               <button type="button" className="h-11 w-11" onClick={() => setQty((q) => Math.max(1, q - 1))}>
                 −
@@ -126,7 +128,7 @@ export function ProductPage() {
                 +
               </button>
             </div>
-            <Button className="flex-1" onClick={() => addItem(product, selectedSize, qty)}>
+            <Button className="!hidden flex-1 md:!inline-flex" onClick={() => addItem(product, selectedSize, qty)}>
               Add to Cart
             </Button>
             <button
@@ -158,7 +160,7 @@ export function ProductPage() {
         </div>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-[40] border-t border-border bg-ivory p-3 shadow-lg md:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-[40] border-t border-border bg-ivory p-3 shadow-lg safe-bottom md:hidden">
         <Button className="w-full" onClick={() => addItem(product, selectedSize, qty)}>
           Add to Cart — {formatINR(product.sale_price ?? product.price)}
         </Button>

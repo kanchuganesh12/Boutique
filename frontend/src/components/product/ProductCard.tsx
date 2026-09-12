@@ -94,7 +94,7 @@ export function ProductCard({ product }: Props) {
             {product.variant_hint ? (
               <span className="text-muted"> · {product.variant_hint}</span>
             ) : null}
-            <span className="text-muted"> | {product.sku}</span>
+            <span className="hidden text-muted sm:inline"> | {product.sku}</span>
           </h3>
         </Link>
         <p className="text-sm">

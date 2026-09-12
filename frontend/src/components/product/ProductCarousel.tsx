@@ -23,7 +23,7 @@ export function ProductCarousel({ title, subtitle, products, viewAllTo }: Props)
   return (
     <section className="section-y">
       <div className="container-boutique">
-        <div className="mb-8 flex items-end justify-between gap-4">
+        <div className="mb-8 flex flex-col items-center gap-2 md:flex-row md:items-end md:justify-between md:gap-4">
           <div className="mx-auto max-w-2xl text-center md:mx-0 md:text-left">
             <h2 className="font-display text-3xl text-ink md:text-4xl">{title}</h2>
             {subtitle ? <p className="mt-2 text-muted">{subtitle}</p> : null}
@@ -43,7 +43,7 @@ export function ProductCarousel({ title, subtitle, products, viewAllTo }: Props)
             type="button"
             aria-label="Previous"
             onClick={() => scroll(-1)}
-            className="absolute -left-2 top-1/3 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
+            className="absolute left-0 top-1/3 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -51,7 +51,7 @@ export function ProductCarousel({ title, subtitle, products, viewAllTo }: Props)
             type="button"
             aria-label="Next"
             onClick={() => scroll(1)}
-            className="absolute -right-2 top-1/3 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
+            className="absolute right-0 top-1/3 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
           >
             <ChevronRight className="h-5 w-5" />
           </button>

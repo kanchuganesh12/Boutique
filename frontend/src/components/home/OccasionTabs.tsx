@@ -20,13 +20,13 @@ export function OccasionTabs({ occasions }: Props) {
           <h2 className="font-display text-3xl md:text-4xl">Occasional Collections</h2>
           <p className="mt-2 text-muted">Looks styled for the moments you gather for.</p>
         </div>
-        <div className="mb-8 flex justify-center gap-2">
+        <div className="mb-8 flex flex-wrap justify-center gap-2">
           {TABS.map((tab) => (
             <button
               key={tab.key}
               type="button"
               onClick={() => setActive(tab.key)}
-              className={`rounded-full px-5 py-2 text-sm font-semibold tracking-label uppercase transition ${
+              className={`rounded-full px-3 py-2 text-xs font-semibold tracking-label uppercase transition sm:px-5 sm:text-sm ${
                 active === tab.key
                   ? 'bg-primary text-white'
                   : 'border border-border text-muted hover:text-primary'

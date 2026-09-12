@@ -15,7 +15,7 @@ export function CartPage() {
       <Helmet>
         <title>Cart | Boutique</title>
       </Helmet>
-      <h1 className="mb-8 font-display text-4xl">Your Cart</h1>
+      <h1 className="mb-8 font-display text-3xl sm:text-4xl">Your Cart</h1>
       {items.length === 0 ? (
         <div className="text-center">
           <p className="text-muted">Your cart is empty.</p>
@@ -24,27 +24,27 @@ export function CartPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid gap-10 lg:grid-cols-[1fr_320px]">
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:gap-10">
           <ul className="space-y-4">
             {items.map((item) => {
               const price = item.product.sale_price ?? item.product.price
               return (
                 <li
                   key={`${item.product.slug}-${item.size}`}
-                  className="flex gap-4 rounded-lg border border-border bg-white p-4"
+                  className="flex flex-col gap-4 rounded-lg border border-border bg-white p-3 sm:flex-row sm:p-4"
                 >
                   <img
                     src={item.product.images[0]?.url}
                     alt=""
-                    className="h-28 w-22 rounded-md object-cover"
+                    className="mx-auto h-36 w-28 shrink-0 rounded-md object-cover sm:mx-0 sm:h-28 sm:w-20"
                   />
-                  <div className="flex-1">
+                  <div className="min-w-0 flex-1">
                     <Link to={`/products/${item.product.slug}`} className="font-medium hover:text-primary">
                       {item.product.name}
                     </Link>
                     {item.size ? <p className="text-sm text-muted">Size: {item.size}</p> : null}
                     <p className="mt-1 font-semibold">{formatINR(price)}</p>
-                    <div className="mt-3 flex items-center gap-2">
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
                       <button
                         type="button"
                         className="h-9 w-9 rounded border border-border"
@@ -73,7 +73,7 @@ export function CartPage() {
               )
             })}
           </ul>
-          <aside className="h-fit rounded-lg border border-border bg-ivory-deep p-6">
+          <aside className="h-fit rounded-lg border border-border bg-ivory-deep p-5 sm:p-6">
             <h2 className="font-display text-2xl">Order summary</h2>
             <div className="mt-4 space-y-2 text-sm">
               <div className="flex justify-between">
@@ -92,7 +92,7 @@ export function CartPage() {
             <label className="mt-4 block text-sm">
               Promo code
               <input
-                className="mt-1 w-full rounded-md border border-border bg-white px-3 py-2"
+                className="mt-1 min-h-11 w-full rounded-md border border-border bg-white px-3 py-2"
                 placeholder="Enter code"
               />
             </label>
@@ -113,7 +113,7 @@ export function CheckoutPage() {
       <Helmet>
         <title>Checkout | Boutique</title>
       </Helmet>
-      <h1 className="mb-2 font-display text-4xl">Checkout</h1>
+      <h1 className="mb-2 font-display text-3xl sm:text-4xl">Checkout</h1>
       <p className="mb-8 text-muted">
         Design-only checkout — no real payment credentials are collected.
       </p>
@@ -124,12 +124,33 @@ export function CheckoutPage() {
           alert('Order placed (demo). Thank you!')
         }}
       >
-        <input required placeholder="Full name" className="w-full rounded-md border border-border px-3 py-3" />
-        <input required type="email" placeholder="Email" className="w-full rounded-md border border-border px-3 py-3" />
-        <input required placeholder="Address" className="w-full rounded-md border border-border px-3 py-3" />
-        <div className="grid grid-cols-2 gap-3">
-          <input required placeholder="City" className="rounded-md border border-border px-3 py-3" />
-          <input required placeholder="PIN code" className="rounded-md border border-border px-3 py-3" />
+        <input
+          required
+          placeholder="Full name"
+          className="min-h-11 w-full rounded-md border border-border px-3 py-3"
+        />
+        <input
+          required
+          type="email"
+          placeholder="Email"
+          className="min-h-11 w-full rounded-md border border-border px-3 py-3"
+        />
+        <input
+          required
+          placeholder="Address"
+          className="min-h-11 w-full rounded-md border border-border px-3 py-3"
+        />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <input
+            required
+            placeholder="City"
+            className="min-h-11 rounded-md border border-border px-3 py-3"
+          />
+          <input
+            required
+            placeholder="PIN code"
+            className="min-h-11 rounded-md border border-border px-3 py-3"
+          />
         </div>
         <p className="text-sm text-muted">Payment: Cash on delivery / UPI (demo)</p>
         <Button type="submit" className="w-full">
@@ -146,7 +167,7 @@ export function SimplePage({ title, children }: { title: string; children: React
       <Helmet>
         <title>{title} | Boutique</title>
       </Helmet>
-      <h1 className="mb-4 font-display text-4xl">{title}</h1>
+      <h1 className="mb-4 font-display text-3xl sm:text-4xl">{title}</h1>
       <div className="max-w-2xl text-muted">{children}</div>
     </div>
   )

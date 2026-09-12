@@ -20,14 +20,14 @@ export function AnnouncementBar({ messages }: Props) {
   if (dismissed || !messages.length) return null
 
   return (
-    <div className="relative bg-ink px-10 py-2 text-center text-xs tracking-label text-ivory uppercase">
-      <p key={index} className="animate-[fade_0.4s_ease]">
+    <div className="relative bg-ink py-2 pl-4 pr-12 text-center text-[10px] tracking-label text-ivory uppercase sm:px-10 sm:pr-12 sm:text-xs">
+      <p key={index} className="line-clamp-2 animate-[fade_0.4s_ease]">
         {messages[index]}
       </p>
       <button
         type="button"
         aria-label="Dismiss announcement"
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-ivory/80 hover:text-white"
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-ivory/80 hover:text-white sm:right-3"
         onClick={() => setDismissed(true)}
       >
         <X className="h-4 w-4" />

@@ -14,8 +14,8 @@ export function DressTheMoment() {
         <div className="absolute inset-0 bg-gradient-to-r from-ink/70 via-ink/40 to-transparent" />
         <div className="absolute inset-0 flex items-center">
           <div className="container-boutique max-w-xl text-ivory">
-            <h2 className="font-display text-4xl md:text-5xl">Dress the Moment</h2>
-            <p className="mt-3 text-ivory/85">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">Dress the Moment</h2>
+            <p className="mt-3 text-sm text-ivory/85 sm:text-base">
               Sarees, sets, and handpicked trends made for joyful celebrations.
             </p>
             <div className="mt-6">

@@ -1,13 +1,21 @@
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useShopStore } from '../../lib/store'
 
 export function WhatsAppFloat() {
+  const { pathname } = useLocation()
+  const onProduct = pathname.startsWith('/products/')
+
   return (
     <a
       href="https://wa.me/919876543210"
       target="_blank"
       rel="noreferrer"
-      className="fixed bottom-5 right-5 z-[55] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
+      className={`fixed right-5 z-[55] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl ${
+        onProduct
+          ? 'bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] md:bottom-5'
+          : 'bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))]'
+      }`}
       aria-label="Chat on WhatsApp"
     >
       <svg viewBox="0 0 24 24" className="h-7 w-7 fill-current" aria-hidden>
@@ -20,6 +28,8 @@ export function WhatsAppFloat() {
 export function Toast() {
   const toast = useShopStore((s) => s.toast)
   const clearToast = useShopStore((s) => s.clearToast)
+  const { pathname } = useLocation()
+  const onProduct = pathname.startsWith('/products/')
 
   useEffect(() => {
     if (!toast) return
@@ -32,7 +42,11 @@ export function Toast() {
   return (
     <div
       role="status"
-      className="fixed bottom-24 left-1/2 z-[80] -translate-x-1/2 rounded-full bg-ink px-5 py-2.5 text-sm text-ivory shadow-lg"
+      className={`fixed left-1/2 z-[80] max-w-[min(90vw,24rem)] -translate-x-1/2 rounded-full bg-ink px-5 py-2.5 text-center text-sm text-ivory shadow-lg ${
+        onProduct
+          ? 'bottom-[calc(7.5rem+env(safe-area-inset-bottom,0px))] md:bottom-24'
+          : 'bottom-[calc(6rem+env(safe-area-inset-bottom,0px))]'
+      }`}
     >
       {toast}
     </div>

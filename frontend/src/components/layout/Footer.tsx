@@ -44,7 +44,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border bg-ivory-deep">
-      <div className="container-boutique section-y grid gap-10 md:grid-cols-4">
+      <div className="container-boutique section-y grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-10">
         <div>
           <h3 className="mb-4 font-display text-xl">Shop</h3>
           <ul className="space-y-2 text-sm text-muted">
@@ -81,7 +81,7 @@ export function Footer() {
             ))}
           </ul>
         </div>
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <h3 className="mb-2 font-display text-xl">Connect</h3>
           <p className="mb-3 text-sm text-muted">Join for early access to festive drops.</p>
           <form onSubmit={subscribe} className="flex flex-col gap-2 sm:flex-row">
