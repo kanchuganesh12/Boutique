@@ -77,10 +77,7 @@ export function Header({ categories }: Props) {
           </div>
 
           <Link to="/" className="justify-self-center text-center" aria-label="Boutique home">
-            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-primary/30 bg-primary text-sm font-bold text-white md:h-12 md:w-12">
-              B
-            </div>
-            <span className="mt-1 block font-display text-lg leading-none tracking-wide text-ink md:text-xl">
+            <span className="block font-display text-3xl leading-none tracking-wide text-ink md:text-4xl lg:text-5xl">
               Boutique
             </span>
           </Link>
