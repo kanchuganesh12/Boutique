@@ -37,7 +37,7 @@ export function Header({ categories }: Props) {
           <span className="mt-1 hidden text-[10px] uppercase tracking-[0.3em] text-muted md:block">Ethnic &middot; Couture</span>
         </Link>
 
-        <HeaderSearch categories={shopCategories} className="order-last w-full md:order-none md:mx-auto md:max-w-2xl md:flex-1" />
+        <HeaderSearch categories={shopCategories} className="order-last w-full md:order-none md:mx-auto md:min-w-0 md:max-w-2xl md:flex-1" />
 
         <div className="ml-auto flex items-center gap-1 md:ml-0 md:gap-2">
           <HeaderIcon to="/account" label="Profile" icon={<User className="h-[22px] w-[22px]" strokeWidth={1.6} />} />
@@ -61,7 +61,7 @@ export function Header({ categories }: Props) {
 
       {/* Sub nav */}
       <nav aria-label="Primary" className="border-t border-border/70">
-        <ul className="no-scrollbar mx-auto flex h-11 max-w-[1500px] items-center gap-5 overflow-x-auto px-3 text-[12px] font-semibold uppercase tracking-[0.12em] whitespace-nowrap md:justify-center md:gap-8 md:px-6">
+        <ul className="no-scrollbar mx-auto flex h-11 max-w-[1500px] items-center gap-5 overflow-x-auto px-3 text-[12px] font-semibold uppercase tracking-[0.12em] whitespace-nowrap md:gap-8 md:px-6 md:[&>li:first-child]:ml-auto md:[&>li:last-child]:mr-auto">
           <SubNavLink to="/collections/new-arrivals" label="New In" highlight />
           <SubNavLink to="/collections/best-sellers" label="Bestsellers" />
           {shopCategories.map((c) => (

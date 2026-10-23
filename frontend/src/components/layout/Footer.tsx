@@ -127,7 +127,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-white/10">
-          <div className="mx-auto flex max-w-[1200px] flex-col gap-4 px-6 py-5 text-xs text-[#bfa5ae] md:flex-row md:items-center md:justify-between">
+          <div className="mx-auto flex max-w-[1200px] flex-col gap-4 px-6 py-5 text-xs text-[#bfa5ae] md:flex-row md:pr-24 md:items-center md:justify-between">
             <p>© {new Date().getFullYear()} Boutique. All rights reserved.</p>
             <div className="flex flex-wrap gap-x-5 gap-y-1">
               <Link to="/policies/terms" className="hover:text-white">Terms</Link>
