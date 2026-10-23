@@ -1,5 +1,6 @@
 import { MapPin } from 'lucide-react'
 import type { Store } from '../../types'
+import { SectionHeading } from '../ui/SectionHeading'
 
 type Props = { stores: Store[] }
 
@@ -7,10 +8,7 @@ export function StoreLocations({ stores }: Props) {
   return (
     <section className="section-y bg-ivory-deep">
       <div className="container-boutique">
-        <div className="mx-auto mb-10 max-w-2xl text-center">
-          <h2 className="font-display text-3xl md:text-4xl">Visit Our Stores</h2>
-          <p className="mt-2 text-muted">Try on weaves in person with our stylists.</p>
-        </div>
+        <SectionHeading title="Visit Our Stores" subtitle="Try on weaves in person with our stylists." />
         <div className="grid gap-4 md:grid-cols-3">
           {stores.map((s) => (
             <article key={s.id} className="rounded-lg border border-border bg-ivory p-6">

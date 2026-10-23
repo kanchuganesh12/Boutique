@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { Collection, Product } from '../../types'
 import { ProductCarousel } from '../product/ProductCarousel'
-import { ProductCard } from '../product/ProductCard'
+import { ProductGrid } from '../product/ProductGrid'
 
 type Props = {
   newArrivals: Product[]
@@ -15,12 +15,14 @@ export function NewArrivalsBlock({ newArrivals, collections, spotlights }: Props
   return (
     <>
       <ProductCarousel
+        eyebrow="Just in"
         title="New Arrivals"
         subtitle="Fresh weaves and cuts, just in from the atelier."
         products={newArrivals}
         viewAllTo="/collections/new-arrivals"
+        className="pt-10 pb-6 lg:pt-20"
       />
-      <div className="container-boutique pb-10">
+      <div className="container-boutique pb-10 lg:pb-16">
         <div className="flex flex-wrap justify-center gap-2">
           {chips.map((c) => (
             <Link
@@ -36,24 +38,24 @@ export function NewArrivalsBlock({ newArrivals, collections, spotlights }: Props
 
       <section className="section-y bg-ivory-deep">
         <div className="container-boutique space-y-14">
-          {Object.entries(spotlights).map(([key, products]) => (
+          {/* Best sellers already have their own carousel above; avoid repeating them. */}
+          {Object.entries(spotlights)
+            .filter(([key]) => key !== 'best-sellers')
+            .map(([key, products]) => (
             <div key={key}>
               <div className="mb-6 flex flex-col items-start gap-2 sm:flex-row sm:items-end sm:justify-between">
-                <h2 className="font-display text-2xl capitalize sm:text-3xl">
-                  {key.replace(/-/g, ' ')}
-                </h2>
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent">Spotlight</p>
+                  <h2 className="font-display text-3xl capitalize sm:text-4xl">{key.replace(/-/g, ' ')}</h2>
+                </div>
                 <Link
-                  to={`/collections/${key === 'designer-blouses' ? 'blouses' : 'best-sellers'}`}
+                  to={`/collections/${key === 'designer-blouses' ? 'blouses' : key}`}
                   className="text-sm font-semibold uppercase tracking-label text-primary"
                 >
                   View All
                 </Link>
               </div>
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                {products.map((p) => (
-                  <ProductCard key={p.id} product={p} />
-                ))}
-              </div>
+              <ProductGrid products={products} columns={3} />
             </div>
           ))}
         </div>

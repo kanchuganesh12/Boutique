@@ -1,5 +1,7 @@
 import { useRef } from 'react'
 import type { Review } from '../../types'
+import { SectionHeading } from '../ui/SectionHeading'
+import { Rating } from '../ui/Rating'
 
 type Props = { reviews: Review[] }
 
@@ -9,12 +11,10 @@ export function Testimonials({ reviews }: Props) {
   return (
     <section className="section-y bg-ivory">
       <div className="container-boutique">
-        <div className="mx-auto mb-10 max-w-2xl text-center">
-          <h2 className="font-display text-3xl md:text-4xl">Genuine words from those who wear us</h2>
-        </div>
+        <SectionHeading eyebrow="Loved by 40,000+ customers" title="Genuine words from those who wear us" />
         <div
           ref={scroller}
-          className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:overflow-visible"
+          className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:px-0 md:grid md:grid-cols-3 md:overflow-visible"
         >
           {reviews.map((r) => (
             <blockquote
@@ -34,8 +34,8 @@ export function Testimonials({ reviews }: Props) {
                   ) : null}
                 </div>
               </div>
-              <p className="font-display text-3xl leading-none text-accent">“</p>
-              <p className="text-sm text-muted">{r.text}</p>
+              <Rating value={r.rating} className="mb-3" />
+              <p className="text-[15px] leading-relaxed text-ink/80">“{r.text}”</p>
             </blockquote>
           ))}
         </div>

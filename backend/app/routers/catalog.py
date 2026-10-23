@@ -1,9 +1,35 @@
+import re
+
 from fastapi import APIRouter, HTTPException
 
 from app.db import get_db
 from app.services.serialize import serialize_doc, serialize_many
 
 router = APIRouter(tags=["catalog"])
+
+ANNOUNCEMENTS = [
+    "Complimentary shipping on orders above ₹2,999",
+    "Festive pre-orders open — expected dispatch in 10–14 days",
+    "Easy 7-day returns on eligible styles",
+]
+
+TRUST_MARQUEE = [
+    "Authentic Handcrafted Fashion",
+    "Uncompromising Quality",
+    "Exclusive & Unique Designs",
+    "Sustainable & Ethical Sourcing",
+    "Seamless Shopping Experience",
+    "Trusted by Thousands",
+]
+
+
+@router.get("/navigation")
+async def navigation():
+    """Lightweight payload for global chrome (header, menus, announcement bar)."""
+    db = get_db()
+    categories = serialize_many(await db.categories.find({}).sort("order", 1).to_list(50))
+    collections = serialize_many(await db.collections.find({}).sort("order", 1).to_list(50))
+    return {"categories": categories, "collections": collections, "announcements": ANNOUNCEMENTS}
 
 
 @router.get("/categories")
@@ -49,6 +75,7 @@ async def search(q: str = "", limit: int = 8):
     db = get_db()
     if not q.strip():
         return {"products": [], "categories": []}
+    q = re.escape(q.strip())
     product_cursor = db.products.find(
         {
             "$or": [
@@ -98,17 +125,6 @@ async def home_payload():
         "spotlights": {"designer-blouses": blouses, "best-sellers": best_sellers[:3]},
         "reviews": reviews,
         "stores": stores,
-        "announcements": [
-            "Complimentary shipping on orders above ₹2,999",
-            "Festive pre-orders open — expected dispatch in 10–14 days",
-            "Easy 7-day returns on eligible styles",
-        ],
-        "trust_marquee": [
-            "Authentic Handcrafted Fashion",
-            "Uncompromising Quality",
-            "Exclusive & Unique Designs",
-            "Sustainable & Ethical Sourcing",
-            "Seamless Shopping Experience",
-            "Trusted by Thousands",
-        ],
+        "announcements": ANNOUNCEMENTS,
+        "trust_marquee": TRUST_MARQUEE,
     }

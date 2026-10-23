@@ -5,7 +5,7 @@ export function TrustMarquee({ items }: Props) {
   const loop = [...items, ...items]
 
   return (
-    <div className="overflow-hidden border-y border-border bg-ivory-deep py-3">
+    <div className="overflow-hidden border-y border-border bg-ivory-deep py-3" aria-label="Why shop with us">
       <div className="flex w-max animate-[marquee_40s_linear_infinite] gap-8 hover:[animation-play-state:paused]">
         {loop.map((item, i) => (
           <span
@@ -19,7 +19,6 @@ export function TrustMarquee({ items }: Props) {
           </span>
         ))}
       </div>
-      <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}`}</style>
     </div>
   )
 }

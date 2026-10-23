@@ -2,9 +2,13 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useShopStore } from '../../lib/store'
 
+/** Pages with a sticky mobile action bar need floaters lifted above it. */
+const hasStickyBar = (pathname: string) => /^\/cart/.test(pathname)
+
 export function WhatsAppFloat() {
   const { pathname } = useLocation()
-  const onProduct = pathname.startsWith('/products/')
+  const onProduct = hasStickyBar(pathname)
+  if (pathname.startsWith('/checkout')) return null
 
   return (
     <a
@@ -29,7 +33,7 @@ export function Toast() {
   const toast = useShopStore((s) => s.toast)
   const clearToast = useShopStore((s) => s.clearToast)
   const { pathname } = useLocation()
-  const onProduct = pathname.startsWith('/products/')
+  const onProduct = hasStickyBar(pathname)
 
   useEffect(() => {
     if (!toast) return
@@ -42,7 +46,8 @@ export function Toast() {
   return (
     <div
       role="status"
-      className={`fixed left-1/2 z-[80] max-w-[min(90vw,24rem)] -translate-x-1/2 rounded-full bg-ink px-5 py-2.5 text-center text-sm text-ivory shadow-lg ${
+      key={toast}
+      className={`fade-in fixed left-1/2 z-[80] max-w-[min(90vw,24rem)] -translate-x-1/2 rounded-lg bg-nav-2 px-5 py-2.5 text-center text-sm text-white shadow-lg ${
         onProduct
           ? 'bottom-[calc(7.5rem+env(safe-area-inset-bottom,0px))] md:bottom-24'
           : 'bottom-[calc(6rem+env(safe-area-inset-bottom,0px))]'

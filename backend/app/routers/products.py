@@ -1,4 +1,4 @@
-from datetime import datetime
+import re
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
@@ -23,6 +23,7 @@ def _product_query(
     q: str | None = None,
 ) -> dict[str, Any]:
     query: dict[str, Any] = {}
+    clauses: list[dict[str, Any]] = []
     if category:
         query["category_slug"] = category
     if collection:
@@ -47,18 +48,22 @@ def _product_query(
     if price_max is not None:
         price_filter["$lte"] = price_max
     if price_filter:
-        query["$or"] = [
+        clauses.append({"$or": [
             {"sale_price": price_filter},
             {"sale_price": None, "price": price_filter},
             {"sale_price": {"$exists": False}, "price": price_filter},
-        ]
+        ]})
 
     if q:
-        query["$or"] = [
-            {"name": {"$regex": q, "$options": "i"}},
-            {"sku": {"$regex": q, "$options": "i"}},
-            {"description": {"$regex": q, "$options": "i"}},
-        ]
+        pattern = re.escape(q.strip())
+        clauses.append({"$or": [
+            {"name": {"$regex": pattern, "$options": "i"}},
+            {"sku": {"$regex": pattern, "$options": "i"}},
+            {"description": {"$regex": pattern, "$options": "i"}},
+            {"category_slug": {"$regex": pattern, "$options": "i"}},
+        ]})
+    if clauses:
+        query["$and"] = clauses
     return query
 
 
@@ -124,6 +129,44 @@ async def best_sellers(limit: int = Query(12, ge=1, le=24)):
 async def new_arrivals(limit: int = Query(12, ge=1, le=24)):
     db = get_db()
     cursor = db.products.find({"is_new": True}).sort("created_at", -1).limit(limit)
+    return serialize_many(await cursor.to_list(length=limit))
+
+
+@router.get("/facets")
+async def facets(category: str | None = None, collection: str | None = None, q: str | None = None):
+    """Filter options available within a listing, so the UI never hardcodes them."""
+    db = get_db()
+    base = _product_query(category=category, collection=collection, q=q)
+    colors = sorted(c for c in await db.products.distinct("color", base) if c)
+    fabrics = sorted(f for f in await db.products.distinct("fabric", base) if f)
+    occasions = sorted(o for o in await db.products.distinct("occasion", base) if o)
+    sizes = [s for s in await db.products.distinct("sizes", base) if s]
+    order = ["XS", "S", "M", "L", "XL", "XXL", "Free Size"]
+    sizes.sort(key=lambda s: (order.index(s) if s in order else len(order), s))
+    has_pre_order = await db.products.count_documents({**base, "pre_order.is_pre_order": True}) > 0
+    return {
+        "colors": colors,
+        "fabrics": fabrics,
+        "occasions": occasions,
+        "sizes": sizes,
+        "availability": ["in-stock", "pre-order"] if has_pre_order else ["in-stock"],
+    }
+
+
+@router.get("/{slug}/related")
+async def related_products(slug: str, limit: int = Query(8, ge=1, le=24)):
+    db = get_db()
+    doc = await db.products.find_one({"slug": slug})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Product not found")
+    query = {
+        "slug": {"$ne": slug},
+        "$or": [
+            {"category_slug": doc.get("category_slug")},
+            {"occasion": doc.get("occasion")},
+        ],
+    }
+    cursor = db.products.find(query).sort(_sort_spec("featured")).limit(limit)
     return serialize_many(await cursor.to_list(length=limit))
 
 

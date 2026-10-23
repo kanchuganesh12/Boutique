@@ -1,7 +1,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { sized } from '../../lib/image'
 import type { Category } from '../../types'
+import { SectionHeading } from '../ui/SectionHeading'
 
 type Props = { categories: Category[] }
 
@@ -14,12 +16,7 @@ export function TopCollections({ categories }: Props) {
   return (
     <section className="section-y bg-ivory">
       <div className="container-boutique">
-        <div className="mx-auto mb-10 max-w-2xl text-center">
-          <h2 className="font-display text-3xl md:text-4xl">Top Collections</h2>
-          <p className="mt-2 text-muted">
-            Curated collections crafted for comfort, tradition, and family moments.
-          </p>
-        </div>
+        <SectionHeading title="Top Collections" subtitle="Curated collections crafted for comfort, tradition, and family moments." />
 
         <div className="relative">
           <button
@@ -51,7 +48,7 @@ export function TopCollections({ categories }: Props) {
               >
                 <div className="mx-auto aspect-square overflow-hidden rounded-full bg-ivory-deep">
                   <img
-                    src={c.image || ''}
+                    src={sized(c.image ?? undefined, 300)}
                     alt=""
                     className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                     loading="lazy"

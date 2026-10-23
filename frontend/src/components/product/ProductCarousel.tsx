@@ -1,83 +1,115 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import clsx from 'clsx'
 import type { Product } from '../../types'
-import { ProductCard } from './ProductCard'
+import { sized } from '../../lib/image'
+import { Price } from '../ui/Price'
+import { Skeleton } from '../ui/Skeleton'
 
 type Props = {
   title: string
+  eyebrow?: string
   subtitle?: string
-  products: Product[]
+  products?: Product[]
+  loading?: boolean
   viewAllTo?: string
+  className?: string
+  /** `strip` shows images only (home page rows); `detail` adds name and price. */
+  variant?: 'strip' | 'detail'
 }
 
-export function ProductCarousel({ title, subtitle, products, viewAllTo }: Props) {
+/** Amazon-style horizontally scrolling product row inside a white panel. */
+export function ProductCarousel({ title, subtitle, products, loading, viewAllTo, className = 'section-y', variant = 'detail' }: Props) {
   const scroller = useRef<HTMLDivElement>(null)
+  const [edges, setEdges] = useState({ start: true, end: false })
+
+  const update = useCallback(() => {
+    const el = scroller.current
+    if (!el) return
+    setEdges({
+      start: el.scrollLeft <= 4,
+      end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 4,
+    })
+  }, [])
+
+  useEffect(() => {
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [update, products])
 
   const scroll = (dir: -1 | 1) => {
     const el = scroller.current
-    if (!el) return
-    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' })
+    el?.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: 'smooth' })
   }
 
+  if (!loading && !products?.length) return null
+  const itemWidth = variant === 'strip' ? 'w-[140px] md:w-[180px]' : 'w-[150px] md:w-[200px]'
+
   return (
-    <section className="section-y">
+    <section className={className} aria-label={title}>
       <div className="container-boutique">
-        <div className="mb-8 flex flex-col items-center gap-2 md:flex-row md:items-end md:justify-between md:gap-4">
-          <div className="mx-auto max-w-2xl text-center md:mx-0 md:text-left">
-            <h2 className="font-display text-3xl text-ink md:text-4xl">{title}</h2>
-            {subtitle ? <p className="mt-2 text-muted">{subtitle}</p> : null}
+        <div className="bg-white px-4 py-4 md:px-5">
+          <div className="mb-3 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <h2 className="font-sans text-[19px] font-bold md:text-[21px]">{title}</h2>
+            {viewAllTo ? (
+              <Link to={viewAllTo} className="a-link text-sm">
+                See more
+              </Link>
+            ) : null}
+            {subtitle ? <p className="basis-full text-sm text-muted">{subtitle}</p> : null}
           </div>
-          {viewAllTo ? (
-            <Link
-              to={viewAllTo}
-              className="hidden shrink-0 text-sm font-semibold tracking-label uppercase text-primary underline-offset-4 hover:underline md:inline"
-            >
-              View All
-            </Link>
-          ) : null}
+
+          <div className="relative">
+            {(['prev', 'next'] as const).map((d) => {
+              const disabled = d === 'prev' ? edges.start : edges.end
+              return (
+                <button
+                  key={d}
+                  type="button"
+                  aria-label={d === 'prev' ? 'Previous products' : 'Next products'}
+                  onClick={() => scroll(d === 'prev' ? -1 : 1)}
+                  disabled={disabled}
+                  className={clsx(
+                    'absolute top-[35%] z-10 hidden h-24 w-11 -translate-y-1/2 items-center justify-center rounded-sm border border-border bg-white/95 shadow-md hover:bg-white disabled:pointer-events-none disabled:opacity-0 lg:flex',
+                    d === 'prev' ? 'left-0' : 'right-0',
+                  )}
+                >
+                  {d === 'prev' ? <ChevronLeft className="h-7 w-7" /> : <ChevronRight className="h-7 w-7" />}
+                </button>
+              )
+            })}
+
+            <div ref={scroller} onScroll={update} className="no-scrollbar flex gap-3 overflow-x-auto md:gap-4">
+              {loading
+                ? Array.from({ length: 7 }).map((_, i) => (
+                    <div key={i} className={clsx('shrink-0', itemWidth)}>
+                      <Skeleton className="aspect-[3/4]" />
+                    </div>
+                  ))
+                : products!.map((p) => (
+                    <Link key={p.id} to={`/products/${p.slug}`} className={clsx('group shrink-0', itemWidth)}>
+                      <span className="block aspect-[3/4] overflow-hidden bg-[#f7f7f7]">
+                        <img
+                          src={sized(p.images[0]?.url, 400)}
+                          alt={p.name}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover mix-blend-multiply"
+                        />
+                      </span>
+                      {variant === 'detail' ? (
+                        <>
+                          <span className="a-link mt-2 line-clamp-2 text-sm group-hover:text-link-hover group-hover:underline">{p.name}</span>
+                          <Price product={p} className="mt-1" />
+                        </>
+                      ) : null}
+                    </Link>
+                  ))}
+            </div>
+          </div>
         </div>
-
-        <div className="relative">
-          <button
-            type="button"
-            aria-label="Previous"
-            onClick={() => scroll(-1)}
-            className="absolute left-0 top-1/3 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            aria-label="Next"
-            onClick={() => scroll(1)}
-            className="absolute right-0 top-1/3 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white shadow-md lg:flex"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-
-          <div
-            ref={scroller}
-            className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {products.map((p) => (
-              <div
-                key={p.id}
-                className="w-[42%] shrink-0 snap-start sm:w-[38%] md:w-[28%] lg:w-[23%]"
-              >
-                <ProductCard product={p} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {viewAllTo ? (
-          <div className="mt-4 text-center md:hidden">
-            <Link to={viewAllTo} className="text-sm font-semibold uppercase tracking-label text-primary">
-              View All
-            </Link>
-          </div>
-        ) : null}
       </div>
     </section>
   )

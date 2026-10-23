@@ -46,6 +46,11 @@ class NewsletterRequest(BaseModel):
     email: str
 
 
+class PromoRequest(BaseModel):
+    code: str
+    subtotal: float = 0
+
+
 class OrderItem(BaseModel):
     product_id: str
     sku: str
@@ -81,6 +86,7 @@ class Order(BaseModel):
     pincode: str
     items: list[OrderItem]
     subtotal: float
+    discount: float = 0
     shipping: float
     total: float
     promo_code: str | None = None

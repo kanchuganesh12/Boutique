@@ -1,21 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #7a1f2b;
-  --color-primary-hover: #641822;
-  --color-accent: #c8891b;
-  --color-sale: #c2410c;
-  --color-preorder: #64748b;
-  --color-badge-new: #c8891b;
-  --color-ivory: #fbf8f4;
-  --color-ivory-deep: #f3eee6;
-  --color-ink: #1c1a17;
-  --color-muted: #6b6459;
-  --color-border: #ede7de;
+  /* Amazon-style palette. Legacy token names are kept so existing pages pick up the new look. */
+  --color-primary: #007185;
+  --color-primary-hover: #c7511f;
+  --color-accent: #ffa41c;
+  --color-sale: #cc0c39;
+  --color-preorder: #565959;
+  --color-badge-new: #007185;
+  --color-ivory: #ffffff;
+  --color-ivory-deep: #f7f7f7;
+  --color-ink: #0f1111;
+  --color-muted: #565959;
+  --color-border: #d5d9d9;
   --color-surface: #ffffff;
+  --color-success: #007600;
+  --color-maroon-deep: #131921;
 
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-nav: #131921;
+  --color-nav-2: #232f3e;
+  --color-nav-3: #37475a;
+  --color-nav-4: #131a22;
+  --color-page: #e3e6e6;
+  --color-cta: #ffd814;
+  --color-cta-hover: #f7ca00;
+  --color-buy: #ffa41c;
+  --color-buy-hover: #fa8900;
+  --color-search: #febd69;
+  --color-search-hover: #f3a847;
+  --color-price: #b12704;
+  --color-deal: #cc0c39;
+  --color-link: #007185;
+  --color-link-hover: #c7511f;
+  --color-brand: #8a2846;
+  --color-brand-hover: #6e1f38;
+  --color-blush: #fbf1f3;
+
+  --font-display: "Amazon Ember", Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --font-sans: "Amazon Ember", Arial, "Helvetica Neue", Helvetica, sans-serif;
 
   --shadow-sm: 0 1px 2px rgb(28 26 23 / 0.06);
   --shadow-md: 0 4px 16px rgb(28 26 23 / 0.08);
@@ -46,8 +68,8 @@
 
   body {
     @apply m-0 bg-ivory font-sans text-ink antialiased;
-    font-size: 15px;
-    line-height: 1.55;
+    font-size: 14px;
+    line-height: 1.45;
     overflow-x: clip;
   }
 
@@ -56,8 +78,17 @@
   h3,
   .font-display {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  img {
+    color: transparent; /* hide alt text flash while loading */
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-primary) 18%, transparent);
   }
 
   a {
@@ -69,7 +100,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid #007185;
     outline-offset: 2px;
   }
 
@@ -88,35 +119,73 @@
 @layer utilities {
   .container-boutique {
     width: 100%;
-    max-width: 1360px;
+    max-width: 1500px;
     margin-inline: auto;
     padding-inline: 16px;
   }
 
   @media (min-width: 768px) {
     .container-boutique {
-      padding-inline: 40px;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .container-boutique {
-      padding-inline: 64px;
+      padding-inline: 20px;
     }
   }
 
   .section-y {
-    padding-block: 40px;
+    padding-block: 20px;
   }
 
   @media (min-width: 1024px) {
     .section-y {
-      padding-block: 80px;
+      padding-block: 28px;
     }
   }
 
+  /* Amazon-style text link */
+  .a-link {
+    color: var(--color-link);
+  }
+  .a-link:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+  }
+
+  /* White content tile used on the grey home/cart backgrounds */
+  .a-card {
+    background: #fff;
+    padding: 20px;
+  }
+
+  /* Thin outline that brightens on hover, used across the dark nav bars */
+  .nav-hit {
+    border: 1px solid transparent;
+    border-radius: 2px;
+  }
+  .nav-hit:hover {
+    border-color: #fff;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bump {
+    animation: bump 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .heart-pop {
+    animation: bump 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .fade-in {
+    animation: fade-in 0.25s ease-out both;
+  }
+
   .tracking-label {
-    letter-spacing: 0.08em;
+    letter-spacing: 0;
   }
 
   .safe-top {
@@ -136,4 +205,25 @@
       padding-bottom: 0;
     }
   }
+}
+
+@keyframes bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }

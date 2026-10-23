@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import type { Product } from '../../types'
-import { ProductCard } from '../product/ProductCard'
+import { ProductGrid } from '../product/ProductGrid'
+import { SectionHeading } from '../ui/SectionHeading'
 
 type Props = { occasions: Record<string, Product[]> }
 
@@ -16,17 +18,16 @@ export function OccasionTabs({ occasions }: Props) {
   return (
     <section className="section-y bg-ivory">
       <div className="container-boutique">
-        <div className="mx-auto mb-8 max-w-2xl text-center">
-          <h2 className="font-display text-3xl md:text-4xl">Occasional Collections</h2>
-          <p className="mt-2 text-muted">Looks styled for the moments you gather for.</p>
-        </div>
-        <div className="mb-8 flex flex-wrap justify-center gap-2">
+        <SectionHeading eyebrow="Shop by occasion" title="Occasion Collections" subtitle="Looks styled for the moments you gather for." />
+        <div className="mb-8 flex flex-wrap justify-center gap-2" role="tablist" aria-label="Occasions">
           {TABS.map((tab) => (
             <button
               key={tab.key}
               type="button"
+              role="tab"
+              aria-selected={active === tab.key}
               onClick={() => setActive(tab.key)}
-              className={`rounded-full px-3 py-2 text-xs font-semibold tracking-label uppercase transition sm:px-5 sm:text-sm ${
+              className={`min-h-11 rounded-full px-4 py-2 text-xs font-semibold tracking-label uppercase transition sm:px-6 sm:text-sm ${
                 active === tab.key
                   ? 'bg-primary text-white'
                   : 'border border-border text-muted hover:text-primary'
@@ -36,10 +37,13 @@ export function OccasionTabs({ occasions }: Props) {
             </button>
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
+        <div role="tabpanel" key={active} className="fade-in">
+          <ProductGrid products={products.slice(0, 8)} />
+        </div>
+        <div className="mt-10 text-center">
+          <Link to={`/collections/${active}`} className="text-sm font-semibold uppercase tracking-label text-primary underline-offset-4 hover:underline">
+            View all {TABS.find((t) => t.key === active)?.label} →
+          </Link>
         </div>
       </div>
     </section>

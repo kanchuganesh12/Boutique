@@ -98,3 +98,54 @@ export type CartItem = {
   size?: string
   quantity: number
 }
+
+export type Navigation = {
+  categories: Category[]
+  collections: Collection[]
+  announcements: string[]
+}
+
+export type Facets = {
+  colors: string[]
+  fabrics: string[]
+  occasions: string[]
+  sizes: string[]
+  availability: string[]
+}
+
+export type PromoResult = {
+  code: string
+  discount: number
+  label: string | null
+}
+
+export type OrderPayload = {
+  contact_email: string
+  contact_name: string
+  phone?: string
+  address_line1: string
+  address_line2?: string
+  city: string
+  state: string
+  pincode: string
+  items: Array<{
+    product_id: string
+    sku: string
+    name: string
+    size?: string
+    quantity: number
+    unit_price: number
+  }>
+  promo_code?: string
+  guest: boolean
+}
+
+export type Order = OrderPayload & {
+  id: string
+  subtotal: number
+  discount: number
+  shipping: number
+  total: number
+  status: string
+  created_at: string
+}

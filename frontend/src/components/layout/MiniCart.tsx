@@ -1,82 +1,76 @@
-import { Link } from 'react-router-dom'
-import { formatINR, useShopStore } from '../../lib/store'
+import { ShoppingBag } from 'lucide-react'
+import { cartTotals, formatINR, selectSubtotal, useShopStore } from '../../lib/store'
 import { Button } from '../ui/Button'
-import { DrawerShell } from './Header'
+import { Drawer } from '../ui/Overlay'
+import { EmptyState } from '../ui/EmptyState'
+import { CartLine } from './CartLine'
+import { FreeShippingBar } from './FreeShippingBar'
 
 export function MiniCart() {
   const open = useShopStore((s) => s.isMiniCartOpen)
   const setOpen = useShopStore((s) => s.setMiniCartOpen)
   const items = useShopStore((s) => s.items)
-  const updateQty = useShopStore((s) => s.updateQty)
-  const removeItem = useShopStore((s) => s.removeItem)
-  const subtotal = useShopStore((s) => s.subtotal())
+  const promo = useShopStore((s) => s.promo)
+  const subtotal = useShopStore(selectSubtotal)
+  const totals = cartTotals(subtotal, promo)
+  const close = () => setOpen(false)
+  const count = items.reduce((n, i) => n + i.quantity, 0)
 
   return (
-    <DrawerShell open={open} onClose={() => setOpen(false)} title="Your Bag">
+    <Drawer
+      open={open}
+      onClose={close}
+      title={count ? `Cart (${count})` : 'Cart'}
+      footer={
+        items.length ? (
+          <div className="space-y-3">
+            {totals.discount ? (
+              <div className="flex justify-between text-sm text-success">
+                <span>Promo {promo?.code}</span>
+                <span>−{formatINR(totals.discount)}</span>
+              </div>
+            ) : null}
+            <div className="flex justify-between text-[15px]">
+              <span>Subtotal</span>
+              <span className="font-bold text-price">{formatINR(subtotal - totals.discount)}</span>
+            </div>
+            <p className="text-xs text-muted">Shipping & taxes calculated at checkout.</p>
+            <div className="grid grid-cols-2 gap-2">
+              <Button to="/cart" variant="secondary" onClick={close}>
+                Go to Cart
+              </Button>
+              <Button to="/checkout" onClick={close}>
+                Proceed to Buy
+              </Button>
+            </div>
+          </div>
+        ) : null
+      }
+    >
       {items.length === 0 ? (
-        <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
-          <p className="text-muted">Your bag is empty.</p>
-          <Button onClick={() => setOpen(false)}>Continue shopping</Button>
+        <div className="p-4">
+          <EmptyState
+            icon={ShoppingBag}
+            title="Your cart is empty"
+            action={
+              <Button to="/collections/new-arrivals" onClick={close}>
+                Shop new releases
+              </Button>
+            }
+          >
+            Discover handcrafted sarees, kurtas and sets made for every celebration.
+          </EmptyState>
         </div>
       ) : (
-        <div className="flex h-full flex-col">
-          <ul className="flex-1 space-y-4 p-4">
-            {items.map((item) => {
-              const price = item.product.sale_price ?? item.product.price
-              return (
-                <li key={`${item.product.slug}-${item.size}`} className="flex gap-3">
-                  <img
-                    src={item.product.images[0]?.url}
-                    alt=""
-                    className="h-24 w-20 rounded-md object-cover"
-                  />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">{item.product.name}</p>
-                    {item.size ? <p className="text-xs text-muted">Size: {item.size}</p> : null}
-                    <p className="mt-1 text-sm font-semibold">{formatINR(price)}</p>
-                    <div className="mt-2 flex items-center gap-2">
-                      <button
-                        type="button"
-                        className="flex h-9 w-9 items-center justify-center rounded border border-border"
-                        onClick={() => updateQty(item.product.slug, item.size, item.quantity - 1)}
-                      >
-                        −
-                      </button>
-                      <span className="w-6 text-center text-sm">{item.quantity}</span>
-                      <button
-                        type="button"
-                        className="flex h-9 w-9 items-center justify-center rounded border border-border"
-                        onClick={() => updateQty(item.product.slug, item.size, item.quantity + 1)}
-                      >
-                        +
-                      </button>
-                      <button
-                        type="button"
-                        className="ml-auto text-xs text-muted underline"
-                        onClick={() => removeItem(item.product.slug, item.size)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              )
-            })}
+        <div className="space-y-5 p-4">
+          <FreeShippingBar subtotal={subtotal} />
+          <ul className="space-y-5">
+            {items.map((item) => (
+              <CartLine key={`${item.product.slug}-${item.size}`} item={item} compact onNavigate={close} />
+            ))}
           </ul>
-          <div className="border-t border-border p-4 space-y-3">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted">Subtotal</span>
-              <span className="font-semibold">{formatINR(subtotal)}</span>
-            </div>
-            <Button className="w-full" onClick={() => setOpen(false)}>
-              <Link to="/checkout">Checkout</Link>
-            </Button>
-            <Button variant="secondary" className="w-full" onClick={() => setOpen(false)}>
-              <Link to="/cart">View Cart</Link>
-            </Button>
-          </div>
         </div>
       )}
-    </DrawerShell>
+    </Drawer>
   )
 }

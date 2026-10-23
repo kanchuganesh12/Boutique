@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
+import { sized } from '../../lib/image'
 import type { Collection } from '../../types'
+import { SectionHeading } from '../ui/SectionHeading'
 
 type Props = { collections: Collection[] }
 
@@ -9,10 +11,7 @@ export function ShopByPrice({ collections }: Props) {
   return (
     <section className="section-y bg-ivory-deep">
       <div className="container-boutique">
-        <div className="mx-auto mb-10 max-w-2xl text-center">
-          <h2 className="font-display text-3xl md:text-4xl">Shop by Price</h2>
-          <p className="mt-2 text-muted">Find the right piece for every budget and occasion.</p>
-        </div>
+        <SectionHeading title="Shop by Price" subtitle="Find the right piece for every budget and occasion." />
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
           {tiles.map((t) => (
             <Link
@@ -22,7 +21,7 @@ export function ShopByPrice({ collections }: Props) {
             >
               <div className="aspect-[4/3] overflow-hidden">
                 <img
-                  src={t.image || ''}
+                  src={sized(t.image ?? undefined, 600)}
                   alt=""
                   className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                   loading="lazy"

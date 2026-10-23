@@ -1,4 +1,6 @@
 import { MessageCircle } from 'lucide-react'
+import { sized } from '../../lib/image'
+import { SectionHeading } from '../ui/SectionHeading'
 
 const REELS = [
   {
@@ -27,10 +29,7 @@ export function ReelsStrip() {
   return (
     <section className="section-y bg-ivory">
       <div className="container-boutique">
-        <div className="mx-auto mb-8 max-w-2xl text-center">
-          <h2 className="font-display text-3xl md:text-4xl">Real voices. Real looks. Real stories.</h2>
-          <p className="mt-2 text-muted">Swipe through customer reels and shop the looks.</p>
-        </div>
+        <SectionHeading title="Real voices. Real looks. Real stories." subtitle="Swipe through customer reels and shop the looks." />
         <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
           {REELS.map((r) => (
             <button
@@ -38,7 +37,7 @@ export function ReelsStrip() {
               type="button"
               className="relative w-[42%] shrink-0 snap-start overflow-hidden rounded-lg sm:w-48"
             >
-              <img src={r.thumb} alt="" className="aspect-[9/16] w-full object-cover" loading="lazy" />
+              <img src={sized(r.thumb, 400)} alt="" className="aspect-[9/16] w-full object-cover" loading="lazy" />
               <span className="absolute inset-0 flex items-center justify-center bg-ink/20">
                 <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90">
                   <MessageCircle className="h-5 w-5 text-primary" />
